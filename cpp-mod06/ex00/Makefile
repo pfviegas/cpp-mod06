@@ -6,7 +6,7 @@
 #    By: paulo <paulo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/01 11:46:31 by pviegas           #+#    #+#              #
-#    Updated: 2024/04/29 15:23:03 by paulo            ###   ########.fr        #
+#    Updated: 2024/04/29 16:10:56 by paulo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ WHITE	= \033[1;37m
 RESET 	= \033[0m
 
 # Executable name
-NAME = scalar
+NAME = convert
 
 # Compiler options
 CXX = c++
