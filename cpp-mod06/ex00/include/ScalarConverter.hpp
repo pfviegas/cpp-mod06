@@ -8,7 +8,7 @@
 #include <iomanip>
 #include <limits>
 
-enum literalType
+enum scalarType
 {
 	ERROR,
 	CHAR,

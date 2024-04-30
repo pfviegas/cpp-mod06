@@ -63,35 +63,44 @@ static void convertDouble(const std::string& str1)
 		std::cout << "double : " << static_cast<double>(str) <<std::endl;
 }
 
+bool isDecimalZero(float num)
+{
+	// Converte para int e compara com o float original
+	return (static_cast<int>(num) == num);
+}
+
 static void convertFloat(const std::string& str1)
 {
 	float str = strtof(str1.c_str(), NULL);
 
-    // Verificações para char
-    if (str > 127 || str < 0)
-        std::cout << "char: impossible" << std::endl;
-    else if (!isprint(static_cast<int>(str)))
-        std::cout << "char: Non displayable" << std::endl;
-    else
-        std::cout << "char: '" << static_cast<char>(str) << "'" << std::endl;
+	// Verificações para char
+	if (str > 127 || str < 0)
+		std::cout << "char: impossible" << std::endl;
+	else if (!isprint(static_cast<int>(str)))
+		std::cout << "char: Non displayable" << std::endl;
+	else
+		std::cout << "char: '" << static_cast<char>(str) << "'" << std::endl;
 
-    // Verificações para int
-    if (str < std::numeric_limits<int>::min() || str > std::numeric_limits<int>::max())
-        std::cout << "int: impossible" << std::endl;
-    else
-        std::cout << "int: " << static_cast<int>(str) << std::endl;
+	// Verificações para int
+	if (str < std::numeric_limits<int>::min() || str > std::numeric_limits<int>::max())
+		std::cout << "int: impossible" << std::endl;
+	else
+		std::cout << "int: " << static_cast<int>(str) << std::endl;
 
-    // Verificações para float
-    if (str < -std::numeric_limits<float>::max() || str > std::numeric_limits<float>::max())
-        std::cout << "float: impossible" << std::endl;
-    else
-        std::cout << "float: " << str << "f" << std::endl;
+	// Verificações para float
+	if (str < -std::numeric_limits<float>::max() || str > std::numeric_limits<float>::max())
+		std::cout << "float: impossible" << std::endl;
+	else
+		if (isDecimalZero(str))
+			std::cout << "float: " << str << ".0f" << std::endl;
+		else
+			std::cout << "float: " << str << "f" << std::endl;
 
-    // Verificações para double
-    if (str < -std::numeric_limits<double>::max() || str > std::numeric_limits<double>::max())
-        std::cout << "double: impossible" << std::endl;
-    else
-        std::cout << "double: " << static_cast<double>(str) << std::endl;
+	// Verificações para double
+	if (str < -std::numeric_limits<double>::max() || str > std::numeric_limits<double>::max())
+		std::cout << "double: impossible" << std::endl;
+	else
+		std::cout << "double: " << static_cast<double>(str) << std::endl;
 }
 
 static void convertInt(const std::string& str1)
@@ -133,6 +142,23 @@ static void convertChar(const char *str)
 	std::cout << "double: " << static_cast<double>(*str) << ".0" <<std::endl;
 }
 
+static bool	isAllDigits(const std::string &str)
+{
+	for (size_t i = 0 ; i < str.length() ; i++)
+		if (!isdigit(str[i]))
+			return (false);
+
+	return (true);
+}
+
+static bool isInteger(const std::string &str)
+{
+	if ((isAllDigits(str) || (str[0]) == '-' || str[0] == '+') && isAllDigits(str.substr(1, str.length())))
+		return (true);
+	else
+		return (false);
+}
+
 static bool isDouble(const std::string& str)
 {
 	char* end;
@@ -143,8 +169,8 @@ static bool isDouble(const std::string& str)
 	// Verifica se não houve caracteres após o número ou erros durante a conversão
 	if (*end != '\0' || errno == ERANGE)
 		return (false);
-
-	return (true);
+	else
+		return (true);
 }
 
 static bool isFloat(const std::string& str)
@@ -154,21 +180,10 @@ static bool isFloat(const std::string& str)
 	float val = strtof(str.c_str(), &end); // Tentar converter para float
 
 	(void) val;
-	if (*end != 'f' || errno == ERANGE)
+	if (*end != 'f' || *(end + 1) != '\0' || errno == ERANGE)
 		return (false);
-	else if (*end == 'f' && *(end + 1) != '\0')
-		return (false);
-
-	return (true);
-}
-
-static bool	isAllDigits(const std::string &str)
-{
-	for (size_t i = 0 ; i < str.length() ; i++)
-		if (!isdigit(str[i]))
-			return (false);
-
-	return (true);
+	else
+		return (true);
 }
 
 static bool checkInfinity(const std::string& str)
@@ -203,13 +218,13 @@ static int getType(const std::string &str)
 	if (!isdigit(str[0]) && str.length() == 1)
 		return (CHAR);
 	
-	if (isFloat(str) || str == "nanf" || str == "+inff" || str == "-inff")
+	if (isFloat(str))
 		return (FLOAT);
 	
-	if (isDouble(str) || str == "nan" || str == "+inf" || str == "-inf")
+	if (isDouble(str))
 		return (DOUBLE);
 
-	if ((isAllDigits(str) || (str[0]) == '-' || str[0] == '+') && isAllDigits(str.substr(1, str.length())))
+	if (isInteger(str))
 		return (INT);
 
 	return (0);
