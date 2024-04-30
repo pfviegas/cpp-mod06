@@ -5,9 +5,9 @@
 
 int main()
 {
-	Data*		data = new Data;
-	uintptr_t	raw;
-
+	Data* data = new Data;
+	uintptr_t raw;
+ 
 	std::cout << "Pointer address: " << data << std::endl;
 
 	raw = Serializer::serialize(data);
