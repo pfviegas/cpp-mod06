@@ -57,16 +57,14 @@ Base* generate(void)
 	Base* base = NULL;
 	int random_value;
 
-	// Usa uma semente de tempo com maior precisão para evitar valores repetidos
-	if (seed == 0)
-	{
-		seed = static_cast<int>(std::time(0));
-	}
-
-	std::srand(seed++);  // Incrementa a semente para garantir aleatoriedade
+	// use a more precise time seed to avoid duplicate values
+	seed = static_cast<int>(std::time(0));
+	// increment the seed to ensure randomness.
+	std::srand(seed++);
+	// generates a random number between 0 and 2.
 	random_value = std::rand() % 3;
 
-	// Adiciona mensagens para indicar qual objeto está sendo criado
+	// Add messages to indicate which object is being created.
 	switch (random_value) 
 	{
 		case 0:
@@ -82,7 +80,7 @@ Base* generate(void)
 			std::cout << "Generated: C" << std::endl;
 			break;
 		default:
-			base = NULL;  // Segurança, caso algo inesperado ocorra
+			base = NULL;	// Safety measure in case something unexpected happens.
 			std::cerr << "Error: Unknown class" << std::endl;
 			break;
 	}
